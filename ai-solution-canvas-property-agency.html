@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 解決方案畫布 — 地產代理行案例簡報</title>
+  <style>
+    :root {
+      --bg-page: #f3f5f8;
+      --bg-slide: #ffffff;
+      --bg-card-top: #e8f0f7;
+      --bg-card-bottom: #f7f9fc;
+      --border-card: #d9e3ee;
+      --primary-navy: #274c6b;
+      --accent-blue: #346894;
+      --accent-gold: #c88a2e;
+      --text-main: #1f2937;
+      --text-secondary: #4b5563;
+      --shadow-slide: 0 20px 45px rgba(20, 38, 56, 0.09);
+      --shadow-card: 0 4px 12px rgba(39, 76, 107, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang HK", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.55;
+      padding: 36px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 36px;
+    }
+
+    /* 16:9 Presentation Slide Container */
+    .slide-wrapper {
+      width: 100%;
+      max-width: 1280px;
+      background: var(--bg-slide);
+      border-radius: 16px;
+      box-shadow: var(--shadow-slide);
+      padding: 44px 48px 40px;
+      border: 1px solid rgba(217, 227, 238, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-wrapper::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary-navy) 0%, var(--accent-blue) 70%, var(--accent-gold) 100%);
+    }
+
+    /* Header Section */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 28px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid #edf2f7;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .title-group h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary-navy);
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .title-group .subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .case-badge {
+      background: #eef4fa;
+      color: var(--primary-navy);
+      border: 1px solid #cbd9e8;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .case-badge span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--accent-gold);
+      display: inline-block;
+    }
+
+    /* 4x2 Canvas Grid */
+    .canvas-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .canvas-card {
+      border-radius: 12px;
+      padding: 20px 20px 22px;
+      border: 1px solid var(--border-card);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .canvas-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(39, 76, 107, 0.11);
+    }
+
+    .canvas-card.top-row {
+      background: linear-gradient(180deg, #e7eff7 0%, #eff5fb 100%);
+    }
+
+    .canvas-card.bottom-row {
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(39, 76, 107, 0.12);
+    }
+
+    .card-num {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent-blue);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary-navy);
+    }
+
+    .card-en {
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      margin-left: auto;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 14.5px;
+      color: var(--text-main);
+    }
+
+    .card-list li {
+      position: relative;
+      padding-left: 14px;
+      line-height: 1.5;
+    }
+
+    .card-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--accent-blue);
+      font-weight: bold;
+    }
+
+    .card-list strong {
+      color: var(--primary-navy);
+      font-weight: 700;
+    }
+
+    .highlight-tag {
+      display: inline-block;
+      background: rgba(52, 104, 148, 0.12);
+      color: var(--primary-navy);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 13.5px;
+    }
+
+    /* Slide Footer */
+    .slide-footer {
+      margin-top: 24px;
+      padding-top: 14px;
+      border-top: 1px solid #edf2f7;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    /* Pitching Guide Section Below Slide */
+    .pitch-section {
+      width: 100%;
+      max-width: 1280px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(20, 38, 56, 0.06);
+      padding: 36px 48px;
+      border: 1px solid rgba(217, 227, 238, 0.8);
+    }
+
+    .pitch-section h2 {
+      font-size: 22px;
+      color: var(--primary-navy);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pitch-section h2::before {
+      content: "";
+      display: inline-block;
+      width: 5px;
+      height: 22px;
+      background: var(--accent-gold);
+      border-radius: 3px;
+    }
+
+    .pitch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .pitch-box {
+      background: #f9fbfd;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .pitch-step {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+
+    .pitch-box h3 {
+      font-size: 17px;
+      color: var(--primary-navy);
+      margin-bottom: 10px;
+    }
+
+    .pitch-box p {
+      font-size: 14.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1080px) {
+      .canvas-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .pitch-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .canvas-grid {
+        grid-template-columns: 1fr;
+      }
+      .slide-wrapper, .pitch-section {
+        padding: 24px 20px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .slide-wrapper {
+        box-shadow: none;
+        border: 1px solid #cbd5e1;
+        page-break-after: always;
+      }
+      .pitch-section {
+        box-shadow: none;
+        border: 1px solid #cbd5e1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 16:9 Slide Canvas -->
+  <section class="slide-wrapper">
+    <header class="slide-header">
+      <div class="title-group">
+        <h1>AI 解決方案畫布（The AI Solution Canvas）</h1>
+        <div class="subtitle">雙語樓盤文案自動生成與智能盤源配對系統</div>
+      </div>
+      <div class="case-badge">
+        <span class="dot"></span>
+        <span>案例 C · 地產代理行（40 名代理團隊）</span>
+      </div>
+    </header>
+
+    <div class="canvas-grid">
+      <!-- Box 1 -->
+      <article class="canvas-card top-row">
+        <div class="card-header">
+          <span class="card-num">1 ·</span>
+          <h2 class="card-title">問題與使用者</h2>
+          <span class="card-en">Problem</span>
+        </div>
+        <ul class="card-list">
+          <li><strong>目標用戶：</strong>40 名地產代理及前線支援文員。</li>
+          <li><strong>現有痛點：</strong>撰寫中英雙語樓盤廣告耗時極長；全靠人腦記憶配對客戶查詢與盤源。</li>
+          <li><strong>業務成本：</strong>容易遺漏優質筍盤，回覆速度慢，直接流失潛在成交機會。</li>
+        </ul>
+      </article>
+
+      <!-- Box 2 -->
+      <article class="canvas-card top-row">
+        <div class="card-header">
+          <span class="card-num">2 ·</span>
+          <h2 class="card-title">AI 任務</h2>
+          <span class="card-en">AI Task</span>
+        </div>
+        <ul class="card-list">
+          <li><strong>文本生成（Generation）：</strong>輸入單位基本參數，一鍵生成具吸引力的中英雙語放盤文案。</li>
+          <li><strong>檢索與推薦（Extraction &amp; Matching）：</strong>自動拆解客戶查詢條件，從盤源庫精準配對合適單位。</li>
+        </ul>
+      </article>
+
+      <!-- Box 3 -->
+      <article class="canvas-card top-row">
+        <div class="card-header">
+          <span class="card-num">3 ·</span>
+          <h2 class="card-title">數據基礎</h2>
+          <span class="card-en">Data</span>
+        </div>
+        <ul class="card-list">
+          <li><strong>現有資產：</strong>歷史中英雙語樓盤廣告庫、現有樓盤資料庫（面積、座向、景觀、校網、叫價）及查詢紀錄。</li>
+          <li><strong>數據狀態：</strong>屬半結構化資料，無需額外人手標註；客戶聯絡方式含個人資料，須先進行脫敏處理。</li>
+        </ul>
+      </article>
+
+      <!-- Box 4 -->
+      <article class="canvas-card top-row">
+        <div class="card-header">
+          <span class="card-num">4 ·</span>
+          <h2 class="card-title">技術方案</h2>
+          <span class="card-en">Approach</span>
+        </div>
+        <ul class="card-list">
+          <li><strong>核心架構：</strong>結合 <span class="highlight-tag">生成式 AI</span> 與 <span class="highlight-tag">RAG 檢索增強生成</span>。</li>
+          <li><strong>實施策略：</strong>採用「購買現成 API + 提示詞工程（Prompting）」方案，無需重頭訓練模型，直接對接內部盤源庫快速落地。</li>
+        </ul>
+      </article>
+
+      <!-- Box 5 -->
+      <article class="canvas-card bottom-row">
+        <div class="card-header">
+          <span class="card-num">5 ·</span>
+          <h2 class="card-title">運行環境</h2>
+          <span class="card-en">Deployment</span>
+        </div>
+        <ul class="card-list">
+          <li><strong>部署模式：</strong><span class="highlight-tag">雲端 API (Cloud API)</span> 連接企業私有向量資料庫。</li>
+          <li><strong>選擇原因：</strong>40 人規模無需承擔自建伺服器（Self-hosted）的高昂硬件與維運成本，且方便代理隨時透過手機或電腦調用。</li>
+        </ul>
+      </article>
+
+      <!-- Box 6 -->
+      <article class="canvas-card bottom-row">
+        <div class="card-header">
+          <span class="card-num">6 ·</span>
+          <h2 class="card-title">效果評估</h2>
+          <span class="card-en">Evaluation</span>
+        </div>
+        <ul class="card-list">
+          <li><strong>核心指標：</strong>雙語文案撰寫時間（目標縮短 80%）、Top-3 盤源推薦命中率、客戶首次回覆時效。</li>
+          <li><strong>測試基準：</strong>抽取過去 100 宗真實客戶查詢及最終成交單位作為基準測試集（Eval Set）。</li>
+        </ul>
+      </article>
+
+      <!-- Box 7 -->
+      <article class="canvas-card bottom-row">
+        <div class="card-header">
+          <span class="card-num">7 ·</span>
+          <h2 class="card-title">風險與保障</h2>
+          <span class="card-en">Safeguards</span>
+        </div>
+        <ul class="card-list">
+          <li><strong>防範幻覺：</strong>嚴格限制模型僅依據資料庫事實生成文案，杜絕虛構實用面積或屋苑設施。</li>
+          <li><strong>私隱合規（PDPO）：</strong>遵守香港《個人資料（私隱）條例》，客戶姓名電話不上傳外部模型；落實「人機協作」，由代理審核後方可發送。</li>
+        </ul>
+      </article>
+
+      <!-- Box 8 -->
+      <article class="canvas-card bottom-row">
+        <div class="card-header">
+          <span class="card-num">8 ·</span>
+          <h2 class="card-title">試點與價值</h2>
+          <span class="card-en">Pilot &amp; ROI</span>
+        </div>
+        <ul class="card-list">
+          <li><strong>6 週試點：</strong>挑選 10 名核心代理先行試用，覆蓋日常放盤文案及新客查詢配對場景。</li>
+          <li><strong>預期 ROI：</strong>每人每週節省 4–5 小時文書時間，帶看轉化率提升 10%–15%，預計首季即可完全回本。</li>
+        </ul>
+      </article>
+    </div>
+
+    <footer class="slide-footer">
+      <span>AI 商業應用規劃畫布 · 地產代理數碼轉型方案</span>
+      <span>建議簡報時長：3 – 5 分鐘</span>
+    </footer>
+  </section>
+
+  <!-- Presenter Pitching Notes -->
+  <section class="pitch-section">
+    <h2>簡報演講策略（Pitching 3 步曲）</h2>
+    <div class="pitch-grid">
+      <div class="pitch-box">
+        <div class="pitch-step">Step 01 · 開場抓痛點（第 1 格）</div>
+        <h3>時間就是成交，記憶不應成為瓶頸</h3>
+        <p>點出 40 名代理每天花大量時間做中英翻譯與寫稿，更常因為「靠人腦記盤」而在高峰期漏掉最匹配的筍盤，這是公司每天正在流失的直接佣金收入。</p>
+      </div>
+      <div class="pitch-box">
+        <div class="pitch-step">Step 02 · 輕資產與合規（第 4、5、7 格）</div>
+        <h3>低成本快速上線，嚴守 PDPO 私隱底線</h3>
+        <p>強調不需購買昂貴伺服器，直接用現有盤源庫結合 RAG 與雲端 API 即可運作；同時主動回應管理層最擔心的「AI 亂寫資料」與「客資外洩」，以 PDPO 脫敏及代理審核把關。</p>
+      </div>
+      <div class="pitch-box">
+        <div class="pitch-step">Step 03 · 數據收尾促決定（第 8 格）</div>
+        <h3>6 週小步快跑，一單成交即回本</h3>
+        <p>提出明確的低風險試點：僅需 10 位代理測試 6 週，每人每週釋放半天時間專注帶看與談判，只要團隊多促成一至兩宗交易，投資回報率（ROI）便已翻倍。</p>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
